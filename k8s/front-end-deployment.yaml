@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: front-end
+  name: front-end
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: front-end
+  template:
+    metadata:
+      labels:
+        run: front-end
+    spec:
+      containers:
+        - args:
+            - java
+            - -jar
+            - ./build/front-end.jar
+          env:
+            - name: APP_PORT
+              value: "8081"
+            - name: NEWSFEED_SERVICE_TOKEN
+              value: T1&eWbYXNWG1w1^YGKDPxAWJ@^et^&kX
+            - name: NEWSFEED_SERVICE_URL
+              value: http://newsfeed:2000
+            - name: QUOTE_SERVICE_URL
+              value: http://quotes:3000
+            - name: STATIC_URL
+              value: http://assets:8000
+          image: image
+          name: front-end
+          ports:
+            - containerPort: 8081
+          resources: {}
+      restartPolicy: Always
+status: {}
