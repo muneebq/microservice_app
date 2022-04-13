@@ -1,0 +1,50 @@
+version: "3"
+services:
+  quotes:
+    image: quotes_service
+    build:
+        context: .
+        dockerfile: Dockerfile
+    container_name: quotes
+    command: java -jar ./build/quotes.jar
+    environment:
+      - APP_PORT=3000
+    ports:
+      - 3000:3000
+  newsfeed:
+    image: newsfeeds_service
+    build: 
+        context: .
+        dockerfile: Dockerfile
+    container_name: newsfeed
+    command: java -jar ./build/newsfeed.jar
+    environment:
+      - APP_PORT=2000
+    ports:
+      - 2000:2000
+  assets:
+    image: assets_service
+    build: 
+        context: .
+        dockerfile: Dockerfile
+    container_name: assets
+    command: python3 ./front-end/public/serve.py
+    ports:
+      - 8000:8000
+  front-end:
+    image: front_end_service
+    build: 
+        context: .
+        dockerfile: Dockerfile
+    command: java -jar ./build/front-end.jar
+    environment:
+      - APP_PORT=8081
+      - STATIC_URL=http://assets:8000
+      - QUOTE_SERVICE_URL=http://quotes:3000
+      - NEWSFEED_SERVICE_URL=http://newsfeed:2000
+      - NEWSFEED_SERVICE_TOKEN=T1&eWbYXNWG1w1^YGKDPxAWJ@^et^&kX
+    depends_on:
+      - quotes
+      - newsfeed
+    ports:
+      - 8081:8081

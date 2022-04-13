@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: assets
+  name: assets
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: assets
+  template:
+    metadata:
+      labels:
+        run: assets
+    spec:
+      containers:
+        - args:
+            - python3
+            - ./front-end/public/serve.py
+          image: image
+          name: assets
+          ports:
+            - containerPort: 8000
+          resources: {}
+      restartPolicy: Always
+status: {}
