@@ -2,7 +2,7 @@
 
 Deploy a microservice based Java application on AWS.
 
-## Services / tools 
+## Services / Tools 
 
 * AWS Elastic Kubernetes Service (EKS)
 * AWS Elastic Container Registry (ECR)
