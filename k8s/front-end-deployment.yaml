@@ -30,7 +30,7 @@ spec:
               value: http://quotes:3000
             - name: STATIC_URL
               value: http://assets:8000
-          image: image
+          image: muneebq/infra_challenge:front_end_service
           name: front-end
           ports:
             - containerPort: 8081

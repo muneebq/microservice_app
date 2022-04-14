@@ -18,7 +18,7 @@ spec:
         - args:
             - python3
             - ./front-end/public/serve.py
-          image: image
+          image: muneebq/infra_challenge:assets_service
           name: assets
           ports:
             - containerPort: 8000

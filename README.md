@@ -1,59 +1,63 @@
-# DevOps Assessment
+## Description
 
-This project contains three services:
+Deploy a microservice based Java application on AWS.
 
-* `quotes` which serves a random quote from `quotes/resources/quotes.json`
-* `newsfeed` which aggregates several RSS feeds together
-* `front-end` which calls the two previous services and displays the results.
+## Services / tools 
+
+* AWS Elastic Kubernetes Service (EKS)
+* AWS Elastic Container Registry (ECR)
+* Terraform
+* AWS Cli
+* Kubectl
+* Docker
 
 ## Prerequisites
 
-* Java
-* [Leiningen](http://leiningen.org/) (can be installed using `brew install leiningen`)
+Following are the pre-requisites to be able to deploy and run the application: 
 
-## Running tests
+* AWS account
+* AWS [CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html)
+* [kubectl](https://kubernetes.io/docs/tasks/tools/)
+* [Terraform] (https://learn.hashicorp.com/tutorials/terraform/install-cli) 
+* [Docker] (https://docs.docker.com/engine/install/ubuntu/)
 
-You can run the tests of all apps by using `make test`
+## Deploy:
 
-## Building
+From the root of the folder, execute the following script:
 
-First you need to ensure that the common libraries are installed: run `make libs` to install them to your local `~/.m2` repository. This will allow you to build the JARs.
+`./setup.sh`
 
-To build all the JARs and generate the static tarball, run the `make clean all` command from this directory. The JARs and tarball will appear in the `build/` directory.
+### Workflow
 
-### Static assets
+Here is the workflow after ./setup.sh script is executed:
 
-`cd` to `front-end/public` and run `./serve.py` (you need Python3 installed). This will serve the assets on port 8000.
+* Infrastructure to run the application on AWS is brought UP from scratch i.e EKS cluster, ECR registries, VPC,
+Security groups, Auto scaling group e.t.c
+* Docker images are build locally on the machine from where the script is executed
+* Docker images are uploaded to the corresponsing ECR registries
+* Application is deployed on K8s using the images we built during the last stage
 
-## Running
+## Files and Folders
 
-All the apps take environment variables to configure them and expose the URL `/ping` which will just return a 200 response that you can use with e.g. a load balancer to check if the app is running.
+Following files and folders are of interest:
+* `Dockerfile` and `docker-compose.yaml` build the docker images
+* `iac` folder contains the infrastructure-as-a-code
+* `k8s` folder contains the files used to deploy application on k8s
+* `setup.sh` script orchestrates the whole process or building infrastructure and deploying the application
 
-### Front-end app
 
-`java -jar front-end.jar`
+## Future Work
 
-*Environment variables*:
+Right now, the whole orchestation is done by `setup.sh` script, which is not the 
+intended behavior for actual development and production environments. Following
+are my recommendations to implement it with a CI/CD pipeline:
 
-* `APP_PORT`: The port on which to run the app
-* `STATIC_URL`: The URL on which to find the static assets
-* `QUOTE_SERVICE_URL`: The URL on which to find the quote service
-* `NEWSFEED_SERVICE_URL`: The URL on which to find the newsfeed service
-* `NEWSFEED_SERVICE_TOKEN`: The authentication token that allows the app to talk to the newsfeed service. This should be treated as an application secret. The value should be: `T1&eWbYXNWG1w1^YGKDPxAWJ@^et^&kX`
+* Infrastructure shall be provisioned with Terraform
+* Code shall be hosted on the Github repositiory
+* Credentials/Environment details to be stored in github secrets
+* Github Actions workflow shall be configured to build and publish the images automatically to the ECR
+* Github Action workflow shall deploy the changes to the K8s cluster
+* We can also define different tests on the code in the pipeline before the docker images are build and 
+or deployed to K8s. 
 
-### Quote service
-
-`java -jar quotes.jar`
-
-*Environment variables*
-
-* `APP_PORT`: The port on which to run the app
-
-### Newsfeed service
-
-`java -jar newsfeed.jar`
-
-*Environment variables*
-
-* `APP_PORT`: The port on which to run the app
 

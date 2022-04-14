@@ -23,7 +23,7 @@ spec:
           env:
             - name: APP_PORT
               value: "3000"
-          image: image
+          image: muneebq/infra_challenge:quotes_service	
           name: quotes
           ports:
             - containerPort: 3000

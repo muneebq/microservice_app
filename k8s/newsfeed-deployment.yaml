@@ -23,7 +23,7 @@ spec:
           env:
             - name: APP_PORT
               value: "2000"
-          image: image
+          image: muneebq/infra_challenge:newsfeeds_service
           name: newsfeed
           ports:
             - containerPort: 2000

@@ -1,32 +1,15 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
   labels:
     run: quotes
   name: quotes
 spec:
-  replicas: 1
+  ports:
+    - name: "3000"
+      port: 3000
+      targetPort: 3000
   selector:
-    matchLabels:
-      run: quotes
-  strategy: {}
-  template:
-    metadata:
-      labels:
-        run: quotes
-    spec:
-      containers:
-        - args:
-            - java
-            - -jar
-            - ./build/quotes.jar
-          env:
-            - name: APP_PORT
-              value: "3000"
-          image: image
-          name: quotes
-          ports:
-            - containerPort: 3000
-          resources: {}
-      restartPolicy: Always
-status: {}
+    run: quotes
+status:
+  loadBalancer: {}
