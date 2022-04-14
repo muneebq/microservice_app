@@ -58,6 +58,9 @@ are my recommendations to implement it with a CI/CD pipeline:
 * Github Actions workflow shall be configured to build and publish the images automatically to the ECR
 * Github Action workflow shall deploy the changes to the K8s cluster
 * We can also define different tests on the code in the pipeline before the docker images are build and 
-or deployed to K8s. 
-
-
+or deployed to K8s
+* We can implement multiple Github workflows for differnet environments i.e Dev, Stage  and Production
+* There can be different triggers for different environments: 
+** Creating feature branch on the github repository triggers the pipeline for Dev environment and deploys to Dev K8s cluster
+** Creating a tag in the feature branch triggers pipline in Stage environment and deploys to Stage K8s cluster
+** Once Code is merged to master, it triggers pipline for the production environment and deploys to the production cluster
